@@ -36,7 +36,7 @@ class User implements UserInterface
 	private $password;
 
 	/**
-	 * @ORM\Column(type="string", length=50, unique=true)
+	 * @ORM\Column(type="string", length=128, unique=true)
 	 */
 	private $token;
 	
