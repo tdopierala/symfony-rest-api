@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -21,11 +22,29 @@ class User implements UserInterface
 
 	/**
 	 * @ORM\Column(type="string", length=50)
+	 * @Assert\NotBlank
+	 * @Assert\Length(
+	 * 		min = 2,
+	 * 		max = 50,
+	 * 		minMessage = "Username must be at least {{ limit }} characters long",
+	 * 		maxMessage = "Username cannot be longer than {{ limit }} characters"
+	 * )
 	 */
 	private $name;
 
 	/**
 	 * @ORM\Column(type="string", length=180, unique=true)
+	 * @Assert\NotBlank
+	 * @Assert\Email(
+	 * 		message = "The email '{{ value }}' is not a valid email.",
+	 * 		checkMX = true
+	 * )
+	 * @Assert\Length(
+	 * 		min = 3,
+	 * 		max = 180,
+	 * 		minMessage = "Email must be at least {{ limit }} characters long",
+	 * 		maxMessage = "Email cannot be longer than {{ limit }} characters"
+	 * )
 	 */
 	private $email;
 
@@ -37,6 +56,17 @@ class User implements UserInterface
 	/**
 	 * @var string The hashed password
 	 * @ORM\Column(type="string")
+	 * @Assert\NotBlank
+	 * @Assert\Length(
+	 * 		min = 3,
+	 * 		max = 255,
+	 * 		minMessage = "Password must be at least {{ limit }} characters long",
+	 * 		maxMessage = "Password cannot be longer than {{ limit }} characters"
+	 * )
+	 * @Assert\Regex(
+	 * 		pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!?@#$%^&*()+=])[A-Za-z\d!?@#$%^&*()+=]{8,}$/",
+	 * 		message="Password must meet the conditions. At least one: digit, lower case alphabet, upper case alphabet, special character (!?@#$%^&*()+=) and don't allow white spaces."
+	 * )
 	 */
 	private $password;
 
@@ -61,6 +91,8 @@ class User implements UserInterface
 		$this->lastlogin = new \DateTime("now");
 
 		$this->token = \bin2hex(\random_bytes(64));
+
+		$this->roles = $this->getRoles();
 	}
 
 	public function getId(): ?int

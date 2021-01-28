@@ -1,20 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block title %}Users list{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/mnt/repo/symfony-rest-api/src/Controller/UserController.php'|file_link(0) }}">src/Controller/UserController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/mnt/repo/symfony-rest-api/templates/user/index.html.twig'|file_link(0) }}">templates/user/index.html.twig</a></code></li>
-    </ul>
+<div class="container">
+	<div class="row">
+		<div class="col-12">
+			<h3>Registered users list</h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Passowrd</th>
+						<th>Token</th>
+						<th>Created</th>
+						<th>Lastlogin</th>
+						<th><a href="{{ path('user_create') }}" class="btn btn-sm btn-outline-dark">Add new user</a></th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for user in users %}
+					<tr>
+						<td>{{ user.id }}</td>
+						<td>{{ user.name }}</td>
+						<td>{{ user.email }}</td>
+						<td>{# {{ user.password }} #} **********</td>
+						<td data-toggle="tooltip" data-placement="top" title="{{ user.token }}">{{ user.token | slice(0, 10) }}...</td>
+						<td>{{ user.created | date('Y-m-d H:i:s') }}</td>
+						<td>{{ user.lastlogin | date('Y-m-d H:i:s') }}</td>
+						<td>
+							<a href="{{ path('user_profile', {id: user.id}) }}" class="btn btn-sm btn-light">View</a>
+							<a href="{{ path('user_edit', {id: user.id}) }}" class="btn btn-sm btn-secondary">Edit</a>
+							<a href="{{ path('user_delete', {id: user.id}) }}" class="btn btn-sm btn-danger">Delete</a>
+						</td>
+					</tr>
+				{% else %}
+					<tr><td colspan="5">No users have been found.</td></tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
 {% endblock %}

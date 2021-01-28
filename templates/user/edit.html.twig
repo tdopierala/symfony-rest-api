@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register new api user{% endblock %}
+
+{% block body %}
+<div class="container">
+	<div class="row">
+		<div class="col-6 offset-3">
+			<h3>Edit user: <i>{{ user.name }}</i></h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-6 offset-3">
+
+			{{ form_start(form) }}
+
+			<div class="form-group">
+				{{ form_label(form.name) }}
+				{{ form_widget(form.name) }}
+			</div>
+
+			<div class="form-group">
+				{{ form_label(form.email) }}
+				{{ form_widget(form.email) }}
+			</div>
+
+			<div class="form-group">
+				{{ form_widget(form.password) }}
+				<small id="userPasswordRepeatHelp" class="form-text text-muted">leave empty if you do not want to change</small>
+			</div>
+
+			<div class="form-group">
+					<label>Api status for user:</label>
+					{% if 'ROLE_API_USER' in user.roles %}
+						{# <span class="badge badge-success">Enabled</span> #}
+						<a href="{{ path('user_activate', {id: user.id}) }}" class="badge badge-success">Enabled</a>
+					{% else %}
+						{# <span class="badge badge-danger">Disabled</span> #}
+						<a href="{{ path('user_activate', {id: user.id}) }}" class="badge badge-danger">Disabled</a>
+					{% endif %}
+					<small id="userApiStatusHelp" class="form-text text-muted">click on status to change</small>
+				</div>
+
+			{% if user.token is defined %}
+			<div class="form-group">
+				{{ form_label(form.token) }}
+				<div class="input-group">
+					{{ form_widget(form.token) }}
+					<div class="input-group-append">
+						<a href="{{ path('user_token', {id: user.id}) }}" class="btn btn-secondary" id="refresh-token">Renew token</a>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+
+			<div class="form-group">
+				{{ form_label(form.save) }}
+				{{ form_widget(form.save) }}
+			</div>
+
+			{{ form_end(form) }}
+
+		</div>
+	</div>
+</div>
+{% endblock %}

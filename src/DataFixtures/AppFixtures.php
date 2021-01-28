@@ -16,7 +16,7 @@ class AppFixtures extends Fixture
 			$user->setName('User Name #'.$i);
 			$user->setEmail('user'.$i.'@symfony4.api');
 			$user->setPassword('password'.$i);
-			$user->setRoles(['ROLE_USER']);
+			$user->setRoles($user->getRoles());
 			$user->setToken(\bin2hex(\random_bytes(64)));
 			
 			$manager->persist($user);
