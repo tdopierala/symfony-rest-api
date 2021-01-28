@@ -22,6 +22,8 @@ class UserController extends AbstractController
 	{
 		$users = $this->getDoctrine()->getRepository(User::class)->findBy([],['id' => 'DESC']);
 
+		//dump();
+
 		return $this->render('user/index.html.twig', [
 			'users' => $users,
 		]);
