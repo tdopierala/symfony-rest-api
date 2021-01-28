@@ -13,6 +13,7 @@ class AppFixtures extends Fixture
 		for ($i=1; $i <= 20; $i++) {
 
 			$user = new User();
+			$user->setName('User Name #'.$i);
 			$user->setEmail('user'.$i.'@symfony4.api');
 			$user->setPassword('password'.$i);
 			$user->setRoles(['ROLE_USER']);

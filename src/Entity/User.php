@@ -20,6 +20,11 @@ class User implements UserInterface
 	private $id;
 
 	/**
+	 * @ORM\Column(type="string", length=50)
+	 */
+	private $name;
+
+	/**
 	 * @ORM\Column(type="string", length=180, unique=true)
 	 */
 	private $email;
@@ -54,6 +59,8 @@ class User implements UserInterface
 	{
 		$this->created = new \DateTime("now");
 		$this->lastlogin = new \DateTime("now");
+
+		$this->token = \bin2hex(\random_bytes(64));
 	}
 
 	public function getId(): ?int
@@ -73,6 +80,18 @@ class User implements UserInterface
 		return $this;
 	}
 
+	public function getName(): ?string
+	{
+		return $this->name;
+	}
+
+	public function setName(string $name): self
+	{
+		$this->name = $name;
+
+		return $this;
+	}
+
 	/**
 	 * A visual identifier that represents this user.
 	 *
@@ -80,7 +99,7 @@ class User implements UserInterface
 	 */
 	public function getUsername(): string
 	{
-		return (string) $this->email;
+		return (string) $this->name;
 	}
 
 	/**
