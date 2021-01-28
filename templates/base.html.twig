@@ -31,29 +31,29 @@
 
 				{% if app.user %}
 					<li class="nav-item">
-						<a class="nav-link" href="/users">Users</a>
+						<a class="nav-link" href="{{ path('user_index') }}">Users</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="/user/add">Create new user</a>
+						<a class="nav-link" href="{{ path('user_create') }}">Create new user</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="/page/api">Api</a>
+						<a class="nav-link" href="{{ path('user_index') }}">Api</a>
 					</li>
 				{% endif %}
 				</ul>
 
 				{% if app.user %}
 				<span class="navbar-text">
-					{{ app.user.name }}
+					<a class="btn btn-sm btn-dark" href="{{ path('user_profile', {id:app.user.id}) }}">{{ app.user.name }}</a>
 				</span>
 				{% endif %}
 
 				<span class="navbar-text">
 				{% if app.user %}
-					<a class="btn btn-sm btn-dark" href="/logout">Sign out</a>
+					<a class="btn btn-sm btn-dark" href="{{ path('app_logout') }}">Sign out</a>
 				{% else %}
-					<a class="btn btn-sm btn-dark" href="/login">Sign in</a>
-					<a class="btn btn-sm btn-light" href="/register">Sign up</a>
+					<a class="btn btn-sm btn-dark" href="{{ path('app_login') }}">Sign in</a>
+					<a class="btn btn-sm btn-light" href="{{ path('app_register') }}">Sign up</a>
 				{% endif %}
 				</span>
 			</div>
