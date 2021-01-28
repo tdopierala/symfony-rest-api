@@ -8,11 +8,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+/**
+ * @Route("/user", name="user_")
+ */
 class UserController extends AbstractController
 {
 	/**
-	 * @Route("/", name="user_index")
+	 * @Route("/index", name="user_index")
 	 */
 	public function index(): Response
 	{
@@ -24,9 +28,9 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/create", name="user_create")
+	 * @Route("/create", name="create")
 	 */
-	public function create(Request $request): Response
+	public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
 	{
 		$em = $this->getDoctrine()->getManager();
 		$user = new User();
@@ -36,7 +40,12 @@ class UserController extends AbstractController
 
 		if($form->isSubmitted() && $form->isValid())
 		{
-			//dump($form->getData());
+			$user->setPassword(
+				$passwordEncoder->encodePassword(
+					$user, 
+					$form->get('password')->getData()
+				)
+			);
 
 			$em->persist($user);
 			$em->flush();
@@ -52,7 +61,7 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/profile/{id}", name="user_profile")
+	 * @Route("/profile/{id}", name="profile")
 	 */
 	public function show(int $id): Response
 	{
@@ -64,9 +73,9 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/edit/{id}", name="user_edit")
+	 * @Route("/edit/{id}", name="edit")
 	 */
-	public function edit(Request $request, int $id): Response
+	public function edit(Request $request, UserPasswordEncoderInterface $passwordEncoder, int $id): Response
 	{
 		$em = $this->getDoctrine()->getManager();
 		$user = $this->getDoctrine()->getRepository(User::class)->find($id);
@@ -76,7 +85,12 @@ class UserController extends AbstractController
 
 		if($form->isSubmitted() && $form->isValid())
 		{
-			//dump($form->getData());
+			$user->setPassword(
+				$passwordEncoder->encodePassword(
+					$user, 
+					$form->get('password')->getData()
+				)
+			);
 
 			$em->persist($user);
 			$em->flush();
@@ -93,7 +107,7 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/delete/{id}", name="user_delete")
+	 * @Route("/delete/{id}", name="delete")
 	 */
 	public function destroy(int $id): Response
 	{
@@ -107,7 +121,7 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/activate/{id}", name="user_activate")
+	 * @Route("/activate/{id}", name="activate")
 	 */
 	public function activate(int $id): Response
 	{
@@ -133,7 +147,7 @@ class UserController extends AbstractController
 	}
 
 	/**
-	 * @Route("/token/{id}", name="user_token")
+	 * @Route("/token/{id}", name="token")
 	 */
 	public function token(int $id): Response
 	{
